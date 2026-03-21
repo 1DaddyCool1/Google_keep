@@ -1,0 +1,106 @@
+<div class="edit-note-dialog">
+  <div class="note-form">
+    <input
+      type="text"
+      class="note-title-input"
+      placeholder="Title"
+      [(ngModel)]="title"
+      (ngModelChange)="title.set($event)"
+    />
+
+
+
+    <div
+      #contentInput
+      class="note-content-input"
+      contenteditable="true"
+      placeholder="Take a note..."
+      (input)="onContentInput($event)"
+      dir="ltr"
+    ></div>
+
+    <!-- Existing Images -->
+    @if (existingImageUrls().length > 0) {
+      <div class="note-images">
+        @for (imageUrl of existingImageUrls(); track $index) {
+          <div class="image-container">
+            <img [src]="imageUrl" alt="Note image" />
+            <button mat-icon-button class="remove-image-btn" (click)="removeExistingImage($index)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- New Image Previews -->
+    @if (imagePreviewUrls().length > 0) {
+      <div class="note-images">
+        @for (imageUrl of imagePreviewUrls(); track $index) {
+          <div class="image-container">
+            <img [src]="imageUrl" alt="Note image" />
+            <button mat-icon-button class="remove-image-btn" (click)="removeNewImage($index)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        }
+      </div>
+    }
+
+    <div class="note-actions">
+      <input
+        type="file"
+        #fileInput
+        multiple
+        accept="image/*"
+        (change)="onFileSelected($event)"
+        style="display: none"
+      />
+      <button mat-icon-button (click)="fileInput.click()" matTooltip="Add image">
+        <mat-icon>image</mat-icon>
+      </button>
+      <button mat-icon-button [matMenuTriggerFor]="formatMenu" matTooltip="Formatting options">
+        <mat-icon>format_size</mat-icon>
+      </button>
+      <span class="spacer"></span>
+      <button mat-raised-button class="close-btn" (click)="close()">
+        Close
+      </button>
+    </div>
+  </div>
+
+  <!-- Formatting Menu -->
+  <mat-menu #formatMenu="matMenu">
+    <button mat-menu-item (click)="applyFormat('h1')">
+      <mat-icon>title</mat-icon>
+      <span>Heading 1</span>
+    </button>
+    <button mat-menu-item (click)="applyFormat('h2')">
+      <mat-icon>text_fields</mat-icon>
+      <span>Heading 2</span>
+    </button>
+    <button mat-menu-item (click)="applyFormat('normal')">
+      <mat-icon>format_clear</mat-icon>
+      <span>Normal</span>
+    </button>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="applyFormat('bold')">
+      <mat-icon>format_bold</mat-icon>
+      <span>Bold</span>
+    </button>
+    <button mat-menu-item (click)="applyFormat('italic')">
+      <mat-icon>format_italic</mat-icon>
+      <span>Italic</span>
+    </button>
+    <button mat-menu-item (click)="applyFormat('underline')">
+      <mat-icon>format_underlined</mat-icon>
+      <span>Underline</span>
+    </button>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="clearFormatting()">
+      <mat-icon>format_clear</mat-icon>
+      <span>Clear formatting</span>
+    </button>
+  </mat-menu>
+  </div>
+

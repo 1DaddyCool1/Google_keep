@@ -1,0 +1,102 @@
+╔══════════════════════════════════════════════════════════════════════════╗
+║                   ELK STACK - QUICK REFERENCE CARD                       ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+📍 URLS
+─────────────────────────────────────────────────────────────────────────
+  Elasticsearch:  http://localhost:9200
+  Kibana:         http://localhost:5601
+  Logstash:       tcp://localhost:5044
+
+⚡ QUICK COMMANDS
+─────────────────────────────────────────────────────────────────────────
+  Start ELK:      .\manage-elk.ps1 -Action start
+  Stop ELK:       .\manage-elk.ps1 -Action stop
+  Check Status:   .\manage-elk.ps1 -Action status
+  View Logs:      .\manage-elk.ps1 -Action logs
+  Test Setup:     .\test-elk-integration.ps1
+
+📂 LOG FILES LOCATION
+─────────────────────────────────────────────────────────────────────────
+  D:\Internal\Google Keep\backend\logs\
+    ├── eureka-server.log
+    ├── api-gateway.log
+    ├── auth-service.log
+    ├── labels-service.log
+    ├── notes-service.log
+    └── media-service.log
+
+🔍 KIBANA SETUP (First Time)
+─────────────────────────────────────────────────────────────────────────
+  1. Open: http://localhost:5601
+  2. Management → Stack Management → Index Patterns
+  3. Create index pattern: springboot-logs-*
+  4. Select time field: @timestamp
+  5. Analytics → Discover → View logs
+
+🔎 USEFUL KIBANA QUERIES
+─────────────────────────────────────────────────────────────────────────
+  service: "notes-service"
+  level: "ERROR"
+  message: *authentication*
+  service: "auth-service" AND level: "ERROR"
+  level: "ERROR" OR level: "WARN"
+
+🛠️ ELASTICSEARCH COMMANDS
+─────────────────────────────────────────────────────────────────────────
+  Health:         curl http://localhost:9200/_cluster/health?pretty
+  List Indices:   curl http://localhost:9200/_cat/indices?v
+  Search Logs:    curl http://localhost:9200/springboot-logs-*/_search?pretty
+
+🐳 DOCKER COMMANDS
+─────────────────────────────────────────────────────────────────────────
+  Start:          docker-compose up -d
+  Stop:           docker-compose down
+  Status:         docker-compose ps
+  Logs:           docker-compose logs -f [service-name]
+  Restart:        docker-compose restart [service-name]
+
+🚨 TROUBLESHOOTING
+─────────────────────────────────────────────────────────────────────────
+  No logs?       → Check: .\test-elk-integration.ps1
+  Port 5044?     → netstat -ano | Select-String "5044"
+  ES memory?     → Increase ES_JAVA_OPTS in compose.yaml
+  Filebeat?      → docker logs filebeat
+
+📊 SERVICES & PORTS
+─────────────────────────────────────────────────────────────────────────
+  Service          Port    Log File
+  ─────────────────────────────────────────────────────────────────────
+  eureka-server    8761    eureka-server.log
+  api-gateway      8080    api-gateway.log
+  auth-service     8081    auth-service.log
+  labels-service   8082    labels-service.log
+  notes-service    8083    notes-service.log
+  media-service    8084    media-service.log
+
+📚 DOCUMENTATION
+─────────────────────────────────────────────────────────────────────────
+  Quick Start:    ELK-QUICKSTART.md
+  Full Guide:     backend/ELK-INTEGRATION-GUIDE.md
+  Summary:        ELK-CONFIGURATION-SUMMARY.md
+
+💡 TIPS
+─────────────────────────────────────────────────────────────────────────
+  ✓ Use field filters in Kibana for faster searches
+  ✓ Create saved searches for frequently used queries
+  ✓ Monitor disk space - Elasticsearch grows quickly
+  ✓ Set up alerts for critical errors
+  ✓ Regular cleanup - Delete old indices
+
+🎯 WORKFLOW
+─────────────────────────────────────────────────────────────────────────
+  1. .\manage-elk.ps1 -Action start
+  2. cd backend; .\start-all-services.ps1
+  3. Open Kibana: http://localhost:5601
+  4. View logs in Discover
+  5. Create dashboards as needed
+
+╔══════════════════════════════════════════════════════════════════════╗
+║  For detailed help, run: Get-Content ELK-QUICKSTART.md | more        ║
+╚══════════════════════════════════════════════════════════════════════╝
+

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/Google Keep/Back End/api-gateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Google Keep/Back End/auth-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Google Keep/Back End/eureka-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Google Keep/Back End/label-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Google Keep/Back End/media-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Google Keep/Back End/note-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Google Keep/Back End/notes-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Google Keep/Back End/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Google Keep/Back End/src/main/resources" charset="UTF-8" />
+  </component>
+</project>

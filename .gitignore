@@ -1,0 +1,4 @@
+# Project exclude paths
+/Google Keep/Back End/api-gateway/target/
+/Google Keep/Back End/auth-service/target/
+/Google Keep/Back End/eureka-server/target/

@@ -1,0 +1,25 @@
+filebeat.inputs:
+  - type: filestream
+    id: springboot-logs
+    enabled: true
+    paths:
+      - /logs/*.log
+    parsers:
+      - ndjson:
+          target: ""
+          add_error_key: true
+    fields:
+      log_type: springboot
+    fields_under_root: true
+
+output.logstash:
+  hosts: ["logstash:5044"]
+
+logging.level: info
+logging.to_files: true
+logging.files:
+  path: /var/log/filebeat
+  name: filebeat
+  keepfiles: 7
+  permissions: 0644
+

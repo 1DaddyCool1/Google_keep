@@ -1,0 +1,37 @@
+<aside class="sidebar" [class.expanded]="isExpanded()">
+  <nav class="sidebar-nav">
+    <mat-nav-list>
+      @for (item of menuItems; track item.name) {
+        @if (item.route) {
+          <a [routerLink]="item.route" routerLinkActive="active" mat-list-item class="menu-item">
+            <mat-icon class="menu-icon">{{ item.icon }}</mat-icon>
+            @if (isExpanded()) {
+              <span class="menu-label">{{ item.name }}</span>
+            }
+          </a>
+        } @else {
+          <a (click)="item.action && item.action()" mat-list-item class="menu-item clickable">
+            <mat-icon class="menu-icon">{{ item.icon }}</mat-icon>
+            @if (isExpanded()) {
+              <span class="menu-label">{{ item.name }}</span>
+            }
+          </a>
+        }
+      }
+
+      <!-- Dynamic Labels Section -->
+      @if (labels().length > 0 && isExpanded()) {
+        <div class="labels-divider"></div>
+        <div class="labels-section-title">Labels</div>
+      }
+      @for (label of labels(); track label.id) {
+        <a mat-list-item class="menu-item label-item" (click)="selectLabel(label.id)">
+          <mat-icon class="menu-icon">label</mat-icon>
+          @if (isExpanded()) {
+            <span class="menu-label">{{ label.name }}</span>
+          }
+        </a>
+      }
+    </mat-nav-list>
+  </nav>
+</aside>

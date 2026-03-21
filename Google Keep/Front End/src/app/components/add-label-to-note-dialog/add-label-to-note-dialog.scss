@@ -1,0 +1,102 @@
+.add-label-dialog {
+  width: 400px;
+  max-width: 90vw;
+}
+
+h2 {
+  margin: 0;
+  padding: 16px 24px;
+  font-size: 20px;
+  font-weight: 500;
+  color: #202124;
+}
+
+mat-dialog-content {
+  padding: 0 24px 16px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.new-label-section {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 16px;
+
+  mat-form-field {
+    flex: 1;
+  }
+
+  button {
+    margin-top: 8px;
+    background-color: #fbbc04;
+    color: #202124;
+
+    &:hover:not(:disabled) {
+      background-color: #f9ab00;
+    }
+
+    mat-icon {
+      margin-right: 4px;
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+.existing-labels-section {
+  h3 {
+    font-size: 14px;
+    font-weight: 500;
+    color: #5f6368;
+    margin: 0 0 12px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .no-labels-text {
+    color: #5f6368;
+    font-size: 14px;
+    text-align: center;
+    padding: 20px 0;
+  }
+
+  .labels-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .label-item {
+    padding: 4px 0;
+
+    mat-checkbox {
+      width: 100%;
+    }
+  }
+}
+
+mat-dialog-actions {
+  padding: 16px 24px;
+  margin: 0;
+
+  button {
+    margin-left: 8px;
+  }
+
+  button[color="primary"] {
+    background-color: #fbbc04;
+    color: #202124;
+
+    &:hover {
+      background-color: #f9ab00;
+    }
+  }
+}
+
+.full-width {
+  width: 100%;
+}

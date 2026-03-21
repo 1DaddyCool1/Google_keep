@@ -1,0 +1,56 @@
+<div class="add-label-dialog">
+  <h2 mat-dialog-title>Add Labels</h2>
+  
+  <mat-dialog-content>
+    <!-- Create New Label Section -->
+    <div class="new-label-section">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Create new label</mat-label>
+        <input
+          matInput
+          [(ngModel)]="newLabelName"
+          (ngModelChange)="newLabelName.set($event)"
+          (keyup.enter)="createNewLabel()"
+          placeholder="Enter label name"
+          [disabled]="isCreatingLabel()"
+        />
+      </mat-form-field>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="createNewLabel()"
+        [disabled]="!newLabelName().trim() || isCreatingLabel()"
+      >
+        <mat-icon>add</mat-icon>
+        Create & Add
+      </button>
+    </div>
+
+    <!-- Existing Labels Section -->
+    <div class="existing-labels-section">
+      <h3>Select labels</h3>
+      @if (availableLabels().length === 0) {
+        <p class="no-labels-text">No labels yet. Create one above!</p>
+      } @else {
+        <div class="labels-list">
+          @for (label of availableLabels(); track label.id) {
+            <div class="label-item">
+              <mat-checkbox
+                [ngModel]="isLabelSelected(label.id)"
+                (ngModelChange)="setLabelSelected(label.id, $event)"
+                color="primary"
+              >
+                {{ label.name }}
+              </mat-checkbox>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="cancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="save()">Done</button>
+  </mat-dialog-actions>
+</div>

@@ -1,0 +1,200 @@
+<div class="notes-container">
+  <!-- Filter Info Bar -->
+  @if (selectedLabelId()) {
+    <div class="filter-info-bar">
+      <mat-icon>label</mat-icon>
+      <span>{{ selectedLabelName() }}</span>
+      <button mat-icon-button (click)="clearLabelFilter()" matTooltip="Clear filter">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  }
+
+  <!-- Add Note Card -->
+  <div class="add-note-section">
+    @if (!isAddingNote()) {
+      <div class="add-note-collapsed" (click)="startAddingNote()" matTooltip="Take a note...">
+        <span class="add-note-text">Take a note...</span>
+        <button mat-icon-button class="add-icon">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    } @else {
+      <mat-card class="add-note-card" (focusout)="onAddCardBlur($event)">
+        <mat-card-content>
+          <mat-form-field class="note-title-field" appearance="outline">
+            <input 
+              matInput 
+              [(ngModel)]="newNote.title" 
+              placeholder="Title"
+              class="note-title-input">
+          </mat-form-field>
+          
+          <div 
+            class="note-content-editable"
+            contenteditable="true"
+            dir="ltr"
+            #contentEditor
+            placeholder="Take a note..."
+            (input)="onContentInput($event)"
+            (focus)="onContentFocus($event)">
+          </div>
+
+          <!-- Image Preview Section -->
+          @if (imagePreviewUrls().length > 0) {
+            <div class="image-preview-container">
+              @for (url of imagePreviewUrls(); track $index) {
+                <div class="image-preview-item">
+                  <img [src]="url" alt="Preview" class="preview-image">
+                  <button mat-icon-button class="remove-image-btn" (click)="removeImage($index)">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+              }
+            </div>
+          }
+        </mat-card-content>
+        
+        <mat-card-actions class="note-actions">
+          <input 
+            type="file" 
+            #fileInput 
+            multiple 
+            accept="image/*" 
+            (change)="onImageSelect($event); $event.stopPropagation()" 
+            (click)="$event.stopPropagation()"
+            style="display: none;">
+          <button 
+            mat-icon-button 
+            type="button"
+            (click)="openFileDialog(); fileInput.click(); $event.stopPropagation()" 
+            (mousedown)="$event.stopPropagation()"
+            matTooltip="Add image">
+            <mat-icon>image</mat-icon>
+          </button>
+          <button 
+            mat-icon-button 
+            type="button"
+            [matMenuTriggerFor]="formatMenu"
+            (menuOpened)="onFormattingMenuOpened()"
+            (menuClosed)="onFormattingMenuClosed()"
+            (click)="$event.stopPropagation()"
+            (mousedown)="$event.stopPropagation()"
+            matTooltip="Formatting options"
+            #formatMenuTrigger="matMenuTrigger">
+            <mat-icon>format_size</mat-icon>
+          </button>
+          <span class="spacer"></span>
+          <button 
+            mat-button 
+            type="button"
+            (click)="saveNote(); $event.stopPropagation()"
+            (mousedown)="$event.preventDefault()">Close</button>
+        </mat-card-actions>
+      </mat-card>
+    }
+  </div>
+
+  <!-- Formatting Menu -->
+  <mat-menu #formatMenu="matMenu">
+    <button mat-menu-item (click)="applyFormat('h1')">
+      <mat-icon>title</mat-icon>
+      <span>Heading 1</span>
+    </button>
+    <button mat-menu-item (click)="applyFormat('h2')">
+      <mat-icon>text_fields</mat-icon>
+      <span>Heading 2</span>
+    </button>
+    <button mat-menu-item (click)="applyFormat('normal')">
+      <mat-icon>format_clear</mat-icon>
+      <span>Normal</span>
+    </button>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="applyFormat('bold')">
+      <mat-icon>format_bold</mat-icon>
+      <span>Bold</span>
+    </button>
+    <button mat-menu-item (click)="applyFormat('italic')">
+      <mat-icon>format_italic</mat-icon>
+      <span>Italic</span>
+    </button>
+    <button mat-menu-item (click)="applyFormat('underline')">
+      <mat-icon>format_underlined</mat-icon>
+      <span>Underline</span>
+    </button>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="clearFormatting()">
+      <mat-icon>format_clear</mat-icon>
+      <span>Clear formatting</span>
+    </button>
+  </mat-menu>
+
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="loading-state">
+      <mat-icon class="loading-icon">hourglass_empty</mat-icon>
+      <p>Loading notes...</p>
+    </div>
+  }
+
+  <!-- Notes Grid -->
+  @else if (notes().length > 0) {
+    <div class="notes-grid">
+      @for (note of notes(); track note.id) {
+        <mat-card class="note-card" (click)="editNote(note)">
+          <mat-card-content>
+            @if (note.title) {
+              <h3 class="note-title">{{ note.title }}</h3>
+            }
+            @if (note.mediaIds && note.mediaIds.length > 0) {
+              <div class="note-images">
+                @for (imageId of getMediaIdsAsStrings(note); track imageId) {
+                  @if (getImageUrl(imageId); as imageUrl) {
+                    <img [src]="imageUrl" alt="Note image" class="note-image">
+                  } @else {
+                    <div class="image-loading-placeholder">
+                      <mat-icon>image</mat-icon>
+                    </div>
+                  }
+                }
+              </div>
+            }
+            <div class="note-content" [innerHTML]="note.content"></div>
+
+            <!-- Labels Section -->
+            @if (getLabelsForNote(note).length > 0) {
+              <div class="note-labels">
+                @for (label of getLabelsForNote(note); track label.id) {
+                  <span class="note-label-chip">{{ label.name }}</span>
+                }
+              </div>
+            }
+          </mat-card-content>
+          
+          <div class="note-actions-bar" (click)="$event.stopPropagation()">
+            <button mat-icon-button (click)="editNote(note); $event.stopPropagation()" matTooltip="Edit note">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="copyNote(note); $event.stopPropagation()" matTooltip="Make a copy">
+              <mat-icon>content_copy</mat-icon>
+            </button>
+            <button mat-icon-button (click)="addLabelToNote(note); $event.stopPropagation()" [matTooltip]="getLabelsForNote(note).length > 0 ? 'Change Labels' : 'Add a Label'">
+              <mat-icon>label</mat-icon>
+            </button>
+            <button mat-icon-button (click)="archiveNote(note.id); $event.stopPropagation()" matTooltip="Archive">
+              <mat-icon>archive</mat-icon>
+            </button>
+            <button mat-icon-button (click)="deleteNote(note.id); $event.stopPropagation()" matTooltip="Delete note">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </mat-card>
+      }
+    </div>
+  } @else {
+    <div class="empty-state">
+      <mat-icon class="empty-icon">lightbulb_outline</mat-icon>
+      <p class="empty-text">Notes you add appear here</p>
+    </div>
+  }
+</div>

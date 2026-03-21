@@ -1,0 +1,11 @@
+<div class="app-container">
+  <app-top-bar (menuToggle)="onMenuToggle()"></app-top-bar>
+  
+  <div class="main-content">
+    <app-sidebar></app-sidebar>
+    
+    <main class="content-area">
+      <router-outlet />
+    </main>
+  </div>
+</div>

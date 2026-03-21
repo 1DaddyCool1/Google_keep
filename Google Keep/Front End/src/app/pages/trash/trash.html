@@ -1,0 +1,75 @@
+<div class="trash-container">
+  <!-- Trash Header -->
+  <div class="trash-header">
+    <div class="trash-info">
+      <mat-icon class="info-icon">info_outline</mat-icon>
+      <span class="info-text">Notes in Trash are deleted after 7 days.</span>
+    </div>
+    @if (notes().length > 0) {
+      <button mat-raised-button color="warn" (click)="emptyTrash()" class="empty-trash-btn">
+        <mat-icon>delete_forever</mat-icon>
+        Empty Trash
+      </button>
+    }
+  </div>
+
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="loading-state">
+      <mat-icon class="loading-icon">hourglass_empty</mat-icon>
+      <p>Loading trashed notes...</p>
+    </div>
+  }
+
+  <!-- Notes Grid -->
+  @else if (notes().length > 0) {
+    <div class="notes-grid">
+      @for (note of notes(); track note.id) {
+        <mat-card class="note-card">
+          <mat-card-content>
+            @if (note.title) {
+              <h3 class="note-title">{{ note.title }}</h3>
+            }
+            @if (note.mediaIds && note.mediaIds.length > 0) {
+              <div class="note-images">
+                @for (imageId of getMediaIdsAsStrings(note); track imageId) {
+                  @if (getImageUrl(imageId); as imageUrl) {
+                    <img [src]="imageUrl" alt="Note image" class="note-image">
+                  } @else {
+                    <div class="image-loading-placeholder">
+                      <mat-icon>image</mat-icon>
+                    </div>
+                  }
+                }
+              </div>
+            }
+            <div class="note-content" [innerHTML]="note.content"></div>
+
+            <!-- Labels Section -->
+            @if (getLabelsForNote(note).length > 0) {
+              <div class="note-labels">
+                @for (label of getLabelsForNote(note); track label.id) {
+                  <span class="note-label-chip">{{ label.name }}</span>
+                }
+              </div>
+            }
+          </mat-card-content>
+          
+          <div class="note-actions-bar">
+            <button mat-icon-button (click)="deleteNotePermanently(note.id, $event)" matTooltip="Delete forever">
+              <mat-icon>delete_forever</mat-icon>
+            </button>
+            <button mat-icon-button (click)="restoreNote(note.id, $event)" matTooltip="Restore">
+              <mat-icon>restore_from_trash</mat-icon>
+            </button>
+          </div>
+        </mat-card>
+      }
+    </div>
+  } @else {
+    <div class="empty-state">
+      <mat-icon class="empty-icon">delete_outline</mat-icon>
+      <p class="empty-text">No notes in Trash</p>
+    </div>
+  }
+</div>

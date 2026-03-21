@@ -1,0 +1,78 @@
+<div class="archived-container">
+  <!-- Archived Header -->
+  <div class="archived-header">
+    <div class="archived-info">
+      <mat-icon class="info-icon">archive</mat-icon>
+      <span class="info-text">Archived Notes</span>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="loading-state">
+      <mat-icon class="loading-icon">hourglass_empty</mat-icon>
+      <p>Loading archived notes...</p>
+    </div>
+  }
+
+  <!-- Notes Grid -->
+  @else if (notes().length > 0) {
+    <div class="notes-grid">
+      @for (note of notes(); track note.id) {
+        <mat-card class="note-card" (click)="editNote(note)">
+          <mat-card-content>
+            @if (note.title) {
+              <h3 class="note-title">{{ note.title }}</h3>
+            }
+            @if (note.mediaIds && note.mediaIds.length > 0) {
+              <div class="note-images">
+                @for (imageId of getMediaIdsAsStrings(note); track imageId) {
+                  @if (getImageUrl(imageId); as imageUrl) {
+                    <img [src]="imageUrl" alt="Note image" class="note-image">
+                  } @else {
+                    <div class="image-loading-placeholder">
+                      <mat-icon>image</mat-icon>
+                    </div>
+                  }
+                }
+              </div>
+            }
+            <div class="note-content" [innerHTML]="note.content"></div>
+
+            <!-- Labels Section -->
+            @if (getLabelsForNote(note).length > 0) {
+              <div class="note-labels">
+                @for (label of getLabelsForNote(note); track label.id) {
+                  <span class="note-label-chip">{{ label.name }}</span>
+                }
+              </div>
+            }
+          </mat-card-content>
+          
+          <div class="note-actions-bar" (click)="$event.stopPropagation()">
+            <button mat-icon-button (click)="editNote(note); $event.stopPropagation()" matTooltip="Edit note">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="copyNote(note); $event.stopPropagation()" matTooltip="Make a copy">
+              <mat-icon>content_copy</mat-icon>
+            </button>
+            <button mat-icon-button (click)="addLabelToNote(note); $event.stopPropagation()" [matTooltip]="getLabelsForNote(note).length > 0 ? 'Change Labels' : 'Add a Label'">
+              <mat-icon>label</mat-icon>
+            </button>
+            <button mat-icon-button (click)="unarchiveNote(note.id, $event); $event.stopPropagation()" matTooltip="Unarchive">
+              <mat-icon>unarchive</mat-icon>
+            </button>
+            <button mat-icon-button (click)="deleteNote(note.id); $event.stopPropagation()" matTooltip="Delete note">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </mat-card>
+      }
+    </div>
+  } @else {
+    <div class="empty-state">
+      <mat-icon class="empty-icon">archive</mat-icon>
+      <p class="empty-text">Your archived notes appear here</p>
+    </div>
+  }
+</div>

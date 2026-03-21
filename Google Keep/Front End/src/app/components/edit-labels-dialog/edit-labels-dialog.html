@@ -1,0 +1,71 @@
+<div class="edit-labels-dialog">
+  <div class="dialog-header">
+    <h2>Edit Labels</h2>
+  </div>
+
+  <div class="dialog-content">
+    <!-- Create New Label Row -->
+    <div class="label-row create-label-row">
+      @if (!isCreatingLabel()) {
+        <button mat-icon-button (click)="startCreatingLabel()" matTooltip="Create Label" class="create-icon-btn">
+          <mat-icon>add</mat-icon>
+        </button>
+        <span class="create-label-text">Create new label</span>
+      } @else {
+        <button mat-icon-button (click)="cancelCreatingLabel()" matTooltip="Cancel" class="cancel-icon-btn">
+          <mat-icon>close</mat-icon>
+        </button>
+        <mat-form-field appearance="outline" class="label-input-field">
+          <input 
+            matInput 
+            [(ngModel)]="newLabelName" 
+            placeholder="Enter label name"
+            (keydown.enter)="createLabel()"
+            autofocus>
+        </mat-form-field>
+        <button mat-icon-button (click)="createLabel()" matTooltip="Create Label" class="save-icon-btn" [disabled]="!newLabelName.trim()">
+          <mat-icon>check</mat-icon>
+        </button>
+      }
+    </div>
+
+    <!-- Existing Labels List -->
+    @if (labels().length > 0) {
+      <div class="labels-list">
+        @for (label of labels(); track label.id) {
+          <div class="label-row">
+            @if (editingLabelId === label.id) {
+              <button mat-icon-button (click)="cancelEditingLabel()" matTooltip="Cancel" class="cancel-icon-btn">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-form-field appearance="outline" class="label-input-field">
+                <input 
+                  matInput 
+                  [(ngModel)]="editingLabelName" 
+                  placeholder="Enter label name"
+                  (keydown.enter)="saveEditedLabel()"
+                  autofocus>
+              </mat-form-field>
+              <button mat-icon-button (click)="saveEditedLabel()" matTooltip="Save" class="save-icon-btn" [disabled]="!editingLabelName.trim()">
+                <mat-icon>check</mat-icon>
+              </button>
+            } @else {
+              <mat-icon class="label-icon">label</mat-icon>
+              <span class="label-name">{{ label.name }}</span>
+              <button mat-icon-button (click)="startEditingLabel(label)" matTooltip="Edit label" class="edit-icon-btn">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button (click)="deleteLabel(label.id)" matTooltip="Delete label" class="delete-icon-btn">
+                <mat-icon>delete</mat-icon>
+              </button>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="dialog-actions">
+    <button mat-button (click)="close()" class="done-btn">Done</button>
+  </div>
+</div>

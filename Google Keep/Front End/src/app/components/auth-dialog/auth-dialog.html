@@ -1,0 +1,72 @@
+<div class="auth-dialog">
+  <div class="auth-header">
+    <img src="lightbulb-logo.svg" alt="Google Keep" class="auth-logo">
+    <h2>{{ isSignup() ? 'Sign up for Google Keep' : 'Sign in to Google Keep' }}</h2>
+  </div>
+
+  @if (!isSignup()) {
+    <!-- Login Form -->
+    <form class="auth-form" (ngSubmit)="onLogin()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Username</mat-label>
+        <input matInput [(ngModel)]="loginData.username" name="username" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" [(ngModel)]="loginData.password" name="password" required>
+      </mat-form-field>
+
+      <div class="forgot-password">
+        <a href="#" class="link">Forgot your password?</a>
+      </div>
+
+      <button mat-raised-button color="primary" type="submit" class="submit-btn" [disabled]="isLoading()">
+        {{ isLoading() ? 'Logging in...' : 'Log In' }}
+      </button>
+
+      <div class="terms">
+        By clicking Log in or Continue with, you agree to Google Keep <a href="#" class="link">Terms of Use</a> and <a href="#" class="link">Privacy Policy</a>
+      </div>
+
+      <div class="switch-mode">
+        Not a user? <a href="#" class="link" (click)="toggleMode(); $event.preventDefault()">Sign up</a>
+      </div>
+    </form>
+  } @else {
+    <!-- Signup Form -->
+    <form class="auth-form" (ngSubmit)="onSignup()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Username</mat-label>
+        <input matInput [(ngModel)]="signupData.username" name="username" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" [(ngModel)]="signupData.email" name="email" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" [(ngModel)]="signupData.password" name="password" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Confirm Password</mat-label>
+        <input matInput type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" class="submit-btn" [disabled]="isLoading()">
+        {{ isLoading() ? 'Signing up...' : 'Sign Up' }}
+      </button>
+
+      <div class="terms">
+        By clicking Sign up, you agree to Google Keep <a href="#" class="link">Terms of Use</a> and <a href="#" class="link">Privacy Policy</a>
+      </div>
+
+      <div class="switch-mode">
+        Already have an account? <a href="#" class="link" (click)="toggleMode(); $event.preventDefault()">Log in</a>
+      </div>
+    </form>
+  }
+</div>

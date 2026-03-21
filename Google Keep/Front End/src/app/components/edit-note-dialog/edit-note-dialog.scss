@@ -1,0 +1,112 @@
+.edit-note-dialog {
+  width: 600px;
+  max-width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.note-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.note-title-input {
+  font-size: 22px;
+  font-weight: 500;
+  border: none;
+  outline: none;
+  color: #202124;
+  padding: 8px 0;
+  direction: ltr !important;
+  text-align: left !important;
+
+  &::placeholder {
+    color: #5f6368;
+  }
+}
+
+// Remove formatting-menu styles as it's now a dropdown
+
+.note-content-input {
+  min-height: 200px;
+  font-size: 14px;
+  border: none;
+  outline: none;
+  color: #202124;
+  padding: 8px 0;
+  direction: ltr !important;
+  text-align: left !important;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+
+  &:empty:before {
+    content: attr(placeholder);
+    color: #5f6368;
+  }
+}
+
+.note-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.image-container {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .remove-image-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    width: 28px;
+    height: 28px;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+  }
+}
+
+.note-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.close-btn {
+  background-color: #fbbc04;
+  color: #202124;
+
+  &:hover {
+    background-color: #f9ab00;
+  }
+}
